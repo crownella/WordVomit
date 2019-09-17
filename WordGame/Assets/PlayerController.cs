@@ -15,14 +15,9 @@ public class PlayerController : MonoBehaviour
     
     private  Boolean canShoot = true;
 
-    public GameObject northSpawn;
-    public GameObject northEastSpawn;
-    public GameObject EastSpawn;
-    public GameObject SouthEastSpawn;
-    public GameObject SouthSpawn;
-    public GameObject SouthWestSpawn;
-    public GameObject WestSpawn;
-    public GameObject NorthWestSpawn;
+    private GameObject _bull = null;
+
+    public GameObject Spawn;
     
     public enum Direction //this declares a type of variable named direction 
     {
@@ -101,52 +96,14 @@ public class PlayerController : MonoBehaviour
 
         //print(goingThisWay.ToString());
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetMouseButtonDown(0))
         {
-            GameObject spawn = null;
-            Vector3 startVel = new Vector3(0,0,0);
-            if (goingThisWay == Direction.North)
+            if (_bull != null)
             {
-                spawn = northSpawn;
-                startVel = new Vector3(0,1,0);
-            }else if (goingThisWay == Direction.NorthEast)
-            {
-                spawn = northEastSpawn;
-                startVel = new Vector3(1,1,0);
-            }else if (goingThisWay == Direction.East)
-            {
-                spawn = EastSpawn;
-                startVel = new Vector3(1,0,0);
-            }else if (goingThisWay == Direction.SouthEast)
-            {
-                spawn = SouthEastSpawn;
-                startVel = new Vector3(1,-1,0);
-            }else if (goingThisWay == Direction.South)
-            {
-                spawn = SouthSpawn;
-                startVel = new Vector3(0,-1,0);
-            }else if (goingThisWay == Direction.SouthWest)
-            {
-                spawn = SouthWestSpawn;
-                startVel = new Vector3(-1,-1,0);
-            }else if (goingThisWay == Direction.West)
-            {
-                spawn = WestSpawn;
-                startVel = new Vector3(-1,0,0);
-            }else if (goingThisWay == Direction.NorthWest)
-            {
-                spawn = NorthWestSpawn;
-                startVel = new Vector3(-1,1,0);
+                Destroy(_bull);
             }
-
-            if (spawn != null)
-            {
-                GameObject _bull = Instantiate(bullet, spawn.transform.position, spawn.transform.rotation);
-                _bull.GetComponent<BulletController>().StartingVelocity = startVel;
-
-            }
+            _bull = Instantiate(bullet, Spawn.transform.position, Spawn.transform.rotation);
 
         }
-        
     }
 }
