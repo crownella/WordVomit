@@ -1,130 +1,117 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public int level = 0;
-    public int currentAnswer = 0;
-    public float gradeK;
-    public float grade1;
-    public float grade2;
-    public class MathProblem
-    {
-        public string problem;
-        public int answer;
-        public bool correct = false;
-        public MathProblem(string _pro, int _ans)
-        {
-            problem = _pro;
-            answer = _ans;
-        }
-    }
+    public GameObject enemy;
+    public GameObject[] spawns = new GameObject[48];
+    public int enemiesKilled;
+    public int difficultyModifier; //set to 2
+    public float baseSpawnRate;
+    public int SpawnModifier;
+    public float minSpawndelay;
+    public int score;
 
-    public MathProblem Kp0 = new MathProblem("1+1", 2);
-    public MathProblem Kp1 = new MathProblem("1+2", 3);
-    public MathProblem Kp2 = new MathProblem("3+1", 4);
-    public MathProblem Kp3 = new MathProblem("2+2", 4);
-    public MathProblem Kp4 = new MathProblem("5+1", 6);
-    public MathProblem Kp5 = new MathProblem("2+3", 5);
-    public MathProblem Kp6 = new MathProblem("6+2", 8);
-    public MathProblem Kp7 = new MathProblem("7+1", 8);
-    public MathProblem Kp8 = new MathProblem("8+1", 9);
-    public MathProblem Kp9 = new MathProblem("2+5", 7);
+    public Text scoreT;
 
-   public MathProblem[] kindergardenProblems = new MathProblem[10];
-    
 
     // Start is called before the first frame update
     void Start()
     {
-        kindergardenProblems[0] = Kp0;
-        kindergardenProblems[1] = Kp1;
-        kindergardenProblems[2] = Kp2;
-        kindergardenProblems[3] = Kp3;
-        kindergardenProblems[4] = Kp4;
-        kindergardenProblems[5] = Kp5;
-        kindergardenProblems[6] = Kp6;
-        kindergardenProblems[7] = Kp7;
-        kindergardenProblems[8] = Kp8;
-        kindergardenProblems[9] = Kp9;
+        StartCoroutine("SpawnEnemies");
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        scoreT.text = score.ToString();
     }
 
-    public void Correct(MathProblem mp)
+    void SpawnEnemy()
     {
-        if (!mp.correct)
+        int tmphealth = 0;
+        int randomSpawn = Random.Range(0, 48);
+        int chance = Random.Range(0, 100);
+        if (chance > 95)
         {
-            mp.correct = true;
+            tmphealth = Random.Range(25, 30);
+        }else if(chance > 88)
+        {
+            tmphealth = Random.Range(20, 35);
         }
+        else if (chance > 78)
+        {
+            tmphealth = Random.Range(15, 20);
+        }
+        else if (chance > 63)
+        {
+            tmphealth = Random.Range(10, 15);
+        }
+        else if (chance > 60)
+        {
+            tmphealth = 10;
+        }
+        else if (chance > 57)
+        {
+            tmphealth = 9;
+        }
+        else if (chance > 53)
+        {
+            tmphealth = 8;
+        }
+        else if (chance > 48)
+        {
+            tmphealth = 7;
+        }
+        else if (chance > 42)
+        {
+            tmphealth = 6;
+        }
+        else if (chance > 35)
+        {
+            tmphealth = 5;
+        }
+        else if (chance > 27)
+        {
+            tmphealth = 4;
+        }
+        else if (chance > 19)
+        {
+            tmphealth = 3;
+        }
+        else if (chance > 10)
+        {
+            tmphealth = 2;
+        }
+        else
+        {
+            tmphealth = 1;
+        }
+
+        tmphealth +=  enemiesKilled / difficultyModifier ; //increase difficulty when more are killed
+        if(tmphealth > 30)
+        {
+            tmphealth = 30; //make sure it doesnt go over 30
+        }
+
+        GameObject tmp = Instantiate(enemy, spawns[randomSpawn].transform.position, spawns[randomSpawn].transform.rotation);
+        tmp.GetComponent<EnemyController>().health = tmphealth;
+
+
     }
 
-    public string GiveQuestion()
+    IEnumerator SpawnEnemies()
     {
-        int random = Random.Range(0, 9);
-        for (int i = random; i < 10; i++)
+        SpawnEnemy();
+        float tmpSpawnDelay = baseSpawnRate - (enemiesKilled / SpawnModifier);
+        if(tmpSpawnDelay < minSpawndelay)
         {
-            if(level == 0)
-            {
-                if (!kindergardenProblems[i].correct)
-                {
-                    currentAnswer = kindergardenProblems[i].answer;
-                    return kindergardenProblems[i].problem;
-                }
-            }
+            tmpSpawnDelay = minSpawndelay;
         }
-        for (int i = 0; i < 10; i++)
-        {
-            if (level == 0)
-            {
-                if (!kindergardenProblems[i].correct)
-                {
-                    currentAnswer = kindergardenProblems[i].answer;
-                    return kindergardenProblems[i].problem;
-                }
-            }
-        }
-
-        for (int i = 0; i < 10; i++)
-        {
-            if (level == 0)
-            {
-                if (!kindergardenProblems[i].correct)
-                {
-                    kindergardenProblems[i].correct = false; //reset problems if u asnwered thema ll
-                    
-                }
-            }
-        }
-
-        for (int i = random; i < 10; i++)
-        {
-            if (level == 0)
-            {
-                if (!kindergardenProblems[i].correct)
-                {
-                    currentAnswer = kindergardenProblems[i].answer;
-                    return kindergardenProblems[i].problem;
-                }
-            }
-        }
-        for (int i = 0; i < 10; i++)
-        {
-            if (level == 0)
-            {
-                if (!kindergardenProblems[i].correct)
-                {
-                    currentAnswer = kindergardenProblems[i].answer;
-                    return kindergardenProblems[i].problem;
-                }
-            }
-        }
-        return "";
-        
+        yield return new WaitForSeconds(tmpSpawnDelay);
+        yield return StartCoroutine("SpawnEnemies");
     }
+
 }
