@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
         */
         if (Input.GetKeyDown(KeyCode.R))
         {
-            SceneManager.LoadScene("abstractIntruders")
+            SceneManager.LoadScene("abstractIntruders");
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad1) && !dead)

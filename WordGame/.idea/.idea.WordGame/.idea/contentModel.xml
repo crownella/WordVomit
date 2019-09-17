@@ -9,7 +9,13 @@
         <e p="BulletController.cs" t="Include" />
         <e p="EnemyBulletController.cs" t="Include" />
         <e p="EnemyController.cs" t="Include" />
+        <e p="GameManager.cs" t="Include" />
+        <e p="KindergardenManager.cs" t="Include" />
         <e p="PlayerController.cs" t="Include" />
+        <e p="Resources" t="Include">
+          <e p="KindergardenProblems.txt" t="Include" />
+        </e>
+        <e p="titlescreen.cs" t="Include" />
       </e>
       <e p="Library" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
